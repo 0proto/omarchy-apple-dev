@@ -183,8 +183,10 @@ and survive by design.
 
 What survives a swap:
 
-- USB pairing lives in `~/.pymobiledevice3/` (plus `/var/lib/lockdown` records).
-- Apple ID auth lives in `~/.local/share/xtool/`.
+- USB pairing lives in `/var/lib/lockdown/` (usbmuxd, system-wide).
+  pymobiledevice3 keeps its own records for wireless pairings under
+  `${XDG_DATA_HOME:-~/.local/share}/pymobiledevice3/`.
+- Apple ID auth lives in `${XDG_CONFIG_HOME:-~/.config}/xtool/`.
 - The SDK cache lives in `~/.cache/xtool/darwin-iPhoneOS<ver>.xtoolsdk`, kept
   by the install script. The SDK bundle references the toolchain that
   registered it. After a swap it must be re-registered into the current

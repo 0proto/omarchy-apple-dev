@@ -311,13 +311,31 @@ sdk_build_and_install() {
 survive_status() {
   echo "-- Survive status --"
   echo "SDK: re-registered from $1"
+  # USB pairing records are usbmuxd's, system-wide under /var/lib/lockdown
+  # (skip its always-present SystemConfiguration.plist). pymobiledevice3 keeps
+  # its own records for wireless pairings: the XDG data dir, or the legacy one.
+  local pairing_dir=""
   if ls "$HOME/.pymobiledevice3"/*.plist >/dev/null 2>&1; then
-    echo "pairing: intact at $HOME/.pymobiledevice3"
+    pairing_dir="$HOME/.pymobiledevice3"
+  elif ls "${XDG_DATA_HOME:-$HOME/.local/share}/pymobiledevice3"/*.plist >/dev/null 2>&1; then
+    pairing_dir="${XDG_DATA_HOME:-$HOME/.local/share}/pymobiledevice3"
+  elif [ -n "$(ls /var/lib/lockdown/*.plist 2>/dev/null | grep -v 'SystemConfiguration.plist' | head -n1)" ]; then
+    pairing_dir="/var/lib/lockdown"
+  fi
+  if [ -n "$pairing_dir" ]; then
+    echo "pairing: intact at $pairing_dir"
   else
     echo "pairing: no records yet (plug the iPhone once; nothing is lost here by a swap)"
   fi
-  if [ -n "$(ls -A "$HOME/.local/share/xtool" 2>/dev/null)" ]; then
-    echo "auth: present at $HOME/.local/share/xtool"
+  # Apple ID auth lives in xtool's config dir; older builds used the data dir.
+  local xtool_auth=""
+  if [ -n "$(ls -A "${XDG_CONFIG_HOME:-$HOME/.config}/xtool" 2>/dev/null)" ]; then
+    xtool_auth="${XDG_CONFIG_HOME:-$HOME/.config}/xtool"
+  elif [ -n "$(ls -A "${XDG_DATA_HOME:-$HOME/.local/share}/xtool" 2>/dev/null)" ]; then
+    xtool_auth="${XDG_DATA_HOME:-$HOME/.local/share}/xtool"
+  fi
+  if [ -n "$xtool_auth" ]; then
+    echo "auth: present at $xtool_auth"
   else
     echo "auth: missing — run: $HOME/.local/bin/xtool auth"
   fi
