@@ -78,11 +78,12 @@ set -euo pipefail
 PATH="$(dirname "$(readlink -f "$(command -v swift)")"):$PATH"
 export PATH
 
-# install-toolchain.sh puts these in ~/.local/bin and ~/pymobile3-venv. A
-# toolchain from a package manager (for example Nix) has them on PATH instead.
+# install-toolchain.sh puts these in ~/.local/bin and $PYMOBILE3_VENV
+# (default ~/pymobile3-venv). A toolchain from a package manager (for example
+# Nix) has them on PATH instead.
 XT="$HOME/.local/bin/xtool"
 [ -x "$XT" ] || XT=$(command -v xtool || echo "$XT")
-PMD3="$HOME/pymobile3-venv/bin/pymobiledevice3"
+PMD3="${PYMOBILE3_VENV:-$HOME/pymobile3-venv}/bin/pymobiledevice3"
 [ -x "$PMD3" ] || PMD3=$(command -v pymobiledevice3 || echo "$PMD3")
 IPSW="$HOME/.local/bin/ipsw"
 [ -x "$IPSW" ] || IPSW=$(command -v ipsw || echo "$IPSW")

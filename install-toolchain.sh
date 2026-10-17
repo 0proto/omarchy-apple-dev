@@ -31,7 +31,7 @@ matching_xcode() {
   esac
 }
 
-VENV="$HOME/pymobile3-venv"
+VENV="${PYMOBILE3_VENV:-$HOME/pymobile3-venv}"
 SDK_SRC="${SDK_SRC:-$HOME/xcode-apple-sdk-src}"
 SDK_CACHE="${SDK_CACHE:-$HOME/.cache/xtool}"
 

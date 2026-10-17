@@ -21,7 +21,7 @@
 set -euo pipefail
 
 here=$(dirname "$(readlink -f "$0")")
-PY="$HOME/pymobile3-venv/bin/python"
+PY="${PYMOBILE3_VENV:-$HOME/pymobile3-venv}/bin/python"
 ASC="$here/tools/asc.py"
 # SwiftPM keeps Swift SDKs under $XDG_CONFIG_HOME/swiftpm when that is set, else ~/.swiftpm.
 darwin_sdk="${XDG_CONFIG_HOME:+$XDG_CONFIG_HOME/swiftpm}"

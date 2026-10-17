@@ -12,7 +12,7 @@ set -euo pipefail
 
 HERE=$(dirname "$(readlink -f "$0")")
 REPO=$(dirname "$HERE")
-PY="$HOME/pymobile3-venv/bin/python"
+PY="${PYMOBILE3_VENV:-$HOME/pymobile3-venv}/bin/python"
 ASC="$REPO/tools/asc.py"
 PATH="$HOME/.local/bin:$PATH"
 export PATH
